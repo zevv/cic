@@ -24,13 +24,13 @@ $(JSON): $(SRCS)
 $(ASC): $(JSON)
 	nextpnr-ice40 --quiet --package sg48 --up5k --json $(JSON) --pcf $(PCF) --asc $(ASC)
 
-gui: $(ASC)
+gui: $(ASC) $(PCF)
 	nextpnr-ice40 --quiet --package sg48 --up5k --json $(JSON) --pcf $(PCF) --gui
 
-$(VP): $(SRSC) din.v
+$(VP): $(SRCS) test.v din.v
 	iverilog -o $(VP) test.v 
 
-$(VCD): $(VP)
+$(VCD): $(VP) $(SRCS)
 	vvp $(VP)
 
 din.v: cic.c

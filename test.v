@@ -1,4 +1,5 @@
 
+`timescale 1ns / 1ps
 `include "cic.v"
 
 module test;
@@ -28,4 +29,4 @@ module test;
   end
 
 
-endmodule;
+endmodule

@@ -1,11 +1,6 @@
-//light up the leds according to a counter to cycle through every one
 
-
-module integrator(reset, clk, din, dout);
-	input reset;
-	input clk;
-	input signed [23:0] din;
-	output reg signed [23:0] dout;
+module integrator #(parameter W=16)
+	(input reset, input clk, input signed [W-1:0] din, output reg signed [W-1:0] dout);
 
 	always @(posedge clk)
 	begin
@@ -18,13 +13,10 @@ module integrator(reset, clk, din, dout);
 endmodule
 
 
-module comb(reset, clk, din, dout);
-	input reset;
-	input clk;
-	input signed [23:0] din;
-	output reg signed [23:0] dout;
+module comb #(parameter W=16)
+	(input reset, input clk, input signed [W-1:0] din, output reg signed [W-1:0] dout);
 
-	reg signed [23:0] din_prev;
+	reg signed [W-1:0] din_prev = 0;
 
 	always @(posedge clk)
 	begin
@@ -40,39 +32,35 @@ module comb(reset, clk, din, dout);
 endmodule
 
 
-
-module cic(reset, clk, din, val);
-	input reset;
-	input clk;
-	input din;
-	output signed [23:0] val;
+module cic #(parameter W=24)
+	(input reset, input clk, input din, output signed [W-1:0] out);
 
 	reg [5:0] counter = 0;
 
-	reg signed [23:0] d0;
-	wire signed [23:0] d1;
-	wire signed [23:0] d2;
-	wire signed [23:0] c1;
-	wire signed [23:0] c2;
+	reg signed [W-1:0] d0;
+	wire signed [W-1:0] d1;
+	wire signed [W-1:0] d2;
+	wire signed [W-1:0] c1;
+	wire signed [W-1:0] c2;
 	wire clk_comb = counter[4];
 
-	integrator int0 (reset, clk, d0, d1);
-	integrator int1 (reset, clk, d1, d2);
+	integrator #(.W(W)) int0 (reset, clk, d0, d1);
+	integrator #(.W(W)) int1 (reset, clk, d1, d2);
 
-	comb comb0 (reset, clk_comb, d2, c1);
-	comb comb1 (reset, clk_comb, c1, c2);
+	comb #(.W(W)) comb0 (reset, clk_comb, d2, c1);
+	comb #(.W(W)) comb1 (reset, clk_comb, c1, c2);
 
-	assign val = c2;
+	assign out = c2;
 
 	always @(posedge clk)
 	begin
 		if (reset) begin
 			counter <= 0;
-			d0 <= 33;
+			d0 <= 0;
 		end else begin
 
 			if (din == 0)
-				d0 <= 24'd1;
+				d0 <= +24'd1;
 			else
 				d0 <= -24'd1;
 
