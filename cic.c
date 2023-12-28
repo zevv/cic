@@ -54,7 +54,6 @@ void emit(double v, float vorg)
 {
 	static FILE *f = NULL;
 	if(f == NULL) f = fopen("/tmp/d", "w");
-	fprintf(f, "%f %f\n", v, v);
 
 	for(int i=0; i<N; i++) {
 		v = integrator_run(&in[i], v);
@@ -67,7 +66,7 @@ void emit(double v, float vorg)
 		for(int i=0; i<N; i++) {
 			v = comb_run(&c[i], v);
 		}
-		//fprintf(f, "%f %f\n", vorg, (double) v / pow(R, N));
+		fprintf(f, "%f %f\n", vorg, (double) v / pow(R, N));
 	}
 
 
@@ -82,7 +81,7 @@ void pdm(double v)
 	for(int i=0; i<48; i++) {
 		integrator += v;
 		out = (integrator > 0.0) ? +1.0 : -1.0;
-		printf(" # 1 din = %d;\n", out > 0 ? 1 : 0);
+		printf(" # 2 din = %d;\n", out > 0 ? 1 : 0);
 		emit(out, v);
 		//printf("%f %f\n", out, v);
 		integrator -= out;

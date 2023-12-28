@@ -1,12 +1,14 @@
 
+`include "cic.v"
+
 module test;
 
   /* Make a reset that pulses once. */
   reg reset = 0;
   initial begin
      # 1 reset = 1;
-     # 1 reset = 0;
-	 `include "din.v"
+     # 2 reset = 0;
+     `include "din.v"
      # 1 $finish();
   end
 

@@ -47,18 +47,18 @@ module cic(reset, clk, din, val);
 	input din;
 	output signed [23:0] val;
 
-	reg [8:0] counter = 0;
+	reg [5:0] counter = 0;
 
 	reg signed [23:0] d0;
 	wire signed [23:0] d1;
 	wire signed [23:0] d2;
-	reg clk_comb;
+	wire signed [23:0] c1;
+	wire signed [23:0] c2;
+	wire clk_comb = counter[4];
 
 	integrator int0 (reset, clk, d0, d1);
 	integrator int1 (reset, clk, d1, d2);
 
-	wire signed [23:0] c1;
-	wire signed [23:0] c2;
 	comb comb0 (reset, clk_comb, d2, c1);
 	comb comb1 (reset, clk_comb, c1, c2);
 
@@ -68,22 +68,15 @@ module cic(reset, clk, din, val);
 	begin
 		if (reset) begin
 			counter <= 0;
-			d0 <= 0;
-			clk_comb <= 0;
+			d0 <= 33;
 		end else begin
 
-			if (din)
+			if (din == 0)
 				d0 <= 24'd1;
 			else
 				d0 <= -24'd1;
 
-			if (counter == 48) begin
-				clk_comb <= 1'd1;
-				counter <= 0;
-			end else begin
-				clk_comb <= 1'd0;
-				counter <= counter + 1;
-			end
+			counter <= counter + 1;
 		end
 	end
 
