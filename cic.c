@@ -50,11 +50,16 @@ void init(void)
 #define N 2
 #define R 48
 
-void emit(int v, float vorg)
+void emit(double v, float vorg)
 {
+	static FILE *f = NULL;
+	if(f == NULL) f = fopen("/tmp/d", "w");
+	fprintf(f, "%f %f\n", v, v);
+
 	for(int i=0; i<N; i++) {
 		v = integrator_run(&in[i], v);
 	}
+
 
 	static int n = 0;
 	if(++n == R) {
@@ -62,7 +67,7 @@ void emit(int v, float vorg)
 		for(int i=0; i<N; i++) {
 			v = comb_run(&c[i], v);
 		}
-		//printf("%f %f\n", vorg, (double) v / pow(R, N));
+		//fprintf(f, "%f %f\n", vorg, (double) v / pow(R, N));
 	}
 
 
@@ -74,7 +79,7 @@ void pdm(double v)
 	static double out = 0.0;
 	static double integrator = 0.0;
 
-	for(int i=0; i<64; i++) {
+	for(int i=0; i<48; i++) {
 		integrator += v;
 		out = (integrator > 0.0) ? +1.0 : -1.0;
 		printf(" # 1 din = %d;\n", out > 0 ? 1 : 0);
@@ -91,7 +96,7 @@ int main(int argc, char **argv)
 
 	double t = 0;
 	for(int i=0; i<80; i++) {
-		double y = cos(t * 2 * M_PI * 21) * 0.5 + sin(t * 2 * M_PI * 100) * 0.3;
+		double y = cos(t * 2 * M_PI * 121) * 0.5 + sin(t * 2 * M_PI * 200) * 0.3;
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;
 		pdm(y);

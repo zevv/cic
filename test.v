@@ -7,7 +7,7 @@ module test;
      # 1 reset = 1;
      # 1 reset = 0;
 	 `include "din.v"
-     # 3500 $finish();
+     # 1 $finish();
   end
 
   /* Make a regular pulsing clock. */

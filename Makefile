@@ -11,7 +11,7 @@ sim: cic.c din.v
 	vvp cic.vp
 
 din.v: cic.c
-	gcc cic.c -o cic -lm && ./cic > din.v
+	gcc -Wall -Werror cic.c -o cic -lm && ./cic > din.v
 
 prog: #for sram
 	iceprog -S $(NAME).bin
