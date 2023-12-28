@@ -62,7 +62,7 @@ void emit(int v, float vorg)
 		for(int i=0; i<N; i++) {
 			v = comb_run(&c[i], v);
 		}
-		printf("%f %f\n", vorg, (double) v / pow(R, N));
+		//printf("%f %f\n", vorg, (double) v / pow(R, N));
 	}
 
 
@@ -77,6 +77,7 @@ void pdm(double v)
 	for(int i=0; i<64; i++) {
 		integrator += v;
 		out = (integrator > 0.0) ? +1.0 : -1.0;
+		printf(" # 1 din = %d;\n", out > 0 ? 1 : 0);
 		emit(out, v);
 		//printf("%f %f\n", out, v);
 		integrator -= out;
@@ -89,7 +90,7 @@ int main(int argc, char **argv)
 	init();
 
 	double t = 0;
-	for(int i=0; i<580; i++) {
+	for(int i=0; i<80; i++) {
 		double y = cos(t * 2 * M_PI * 21) * 0.5 + sin(t * 2 * M_PI * 100) * 0.3;
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;
