@@ -73,28 +73,44 @@ void emit(double v, float vorg)
 }
 
 
-void pdm(double v0, double v1)
+void pdm(double *y)
 {
-	static double out0 = 0.0;
-	static double int0 = 0.0;
-	static double out1 = 0.0;
-	static double int1 = 0.0;
+	static double out[16];
+	static double intg[16];
 
 	for(int i=0; i<48; i++) {
-		int0 += v0;
-		out0 = (int0 > 0.0) ? +1.0 : -1.0;
 		
-		int1 += v1;
-		out1 = (int1 > 0.0) ? +1.0 : -1.0;
+		for(int j=0; j<16; j++) {
+			intg[j] += y[j];
+			out[j] = (intg[j] > 0.0) ? +1.0 : -1.0;
+			intg[j] -= out[j];
+		}
+		
+		printf("#5\n");
+		for(int j=0; j<16; j+=2) {
+			printf("din[%d] = %d;\n", j<2, out[j] > 0 ? 1 : 0);
+		}
 
-		printf(" # 20 din = %d;\n", out0 > 0 ? 1 : 0);
-		printf(" # 20 din = 1'dx;\n");
-		printf(" # 20 din = %d;\n", out1 > 0 ? 1 : 0);
-		printf(" # 20 din = 1'dx;\n");
+		printf("#15\n");
+		for(int j=0; j<16; j+=2) {
+			printf("din[%d] = 1'dx;\n", j<2);
+		}
+
+		printf("#5\n");
+		for(int j=1; j<16; j+=2) {
+			printf("din[%d] = %d;\n", j<2, out[j] > 0 ? 1 : 0);
+		}
+		
+		printf("#15\n");
+		for(int j=0; j<16; j+=2) {
+			printf("din[%d] = 1'dx;\n", j<2);
+		}
+
+		//printf(" # 10 din = 1'dx;\n");
+		//printf(" # 10 din = %d;\n", out1 > 0 ? 1 : 0);
+		//printf(" # 10 din = 1'dx;\n");
 		//emit(out0, out1, v0, v1);
 		//printf("%f %f\n", out, v);
-		int0 -= out0;
-		int1 -= out1;
 	}
 }
 
@@ -105,11 +121,13 @@ int main(int argc, char **argv)
 
 	double t = 0;
 	for(int i=0; i<80; i++) {
-		double y0 = cos(t * 2 * M_PI * 521);
-		double y1 = sin(t * 2 * M_PI * 200);
+		double y[16];
+		for(int j=0; j<16; j++) {
+			y[j] = cos(t * 2 * M_PI * (((j * 23123123) % 2000) + 100));
+		}
+		pdm(y);
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;
-		pdm(y0, y1);
 	}
 	return 0;
 }

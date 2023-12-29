@@ -10,16 +10,15 @@ module top(input clk, output LED_R, output LED_G, output LED_B, input IOB_8A, in
 
 	assign reset = 0;
 
-	wire clk_left;
-	wire clk_right;
-	wire clk_pcm;
-	audio_clock a1 (reset, clk, clk_left, clk_right, clk_pcm);
+	wire en_left;
+	wire en_right;
+	wire en_pcm;
+	wire clk_out_pdm;
+	audio_clock a1 (reset, clk, clk_out_pdm, en_left, en_right, en_pcm);
 
-	cic c_00 (reset, clk_left,  clk_pcm, IOB_8A, val[0]);
-	cic c_01 (reset, clk_right, clk_pcm, IOB_9B, val[1]);
-	cic c_02 (reset, clk_left,  clk_pcm, IOB_4A, val[2]);
-	
-	doa doa_00 (clk, val[0]);
+	cic c_00 (reset, clk, en_left,  en_pcm, IOB_8A, val[0]);
+	cic c_01 (reset, clk, en_right, en_pcm, IOB_8A, val[1]);
+	cic c_02 (reset, clk, en_left,  en_pcm, IOB_9B, val[2]);
 
 	assign LED_R = val[0][0];
 	assign LED_G = val[1][0];

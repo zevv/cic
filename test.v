@@ -14,7 +14,7 @@ module test;
 	end
 
 	initial begin
-		# 10 din = 1'dx;
+		# 3
 		`include "din.v"
 		# 1 $finish();
 	end
@@ -22,24 +22,24 @@ module test;
 	reg clk = 0;
 	always #1 clk <= !clk;
 
-	wire clk_left;
-	wire clk_right;
-	wire clk_pcm;
-	audio_clock a1 (reset, clk, clk_left, clk_right, clk_pcm);
+	wire en_left;
+	wire en_right;
+	wire en_pcm;
+	audio_clock a1 (reset, clk, clk_out_pdm, en_left, en_right, en_pcm);
 
 	wire [15:0] val [15:0];
-	reg din;
-	cic c_00 (reset, clk_left,  clk_pcm, din, val[0]);
-	cic c_01 (reset, clk_right, clk_pcm, din, val[1]);
+	reg din[15:0];
+	cic c_00 (reset, clk, en_left,  en_pcm, din[0], val[0]);
+	cic c_01 (reset, clk, en_right, en_pcm, din[0], val[1]);
+	cic c_02 (reset, clk, en_left,  en_pcm, din[1], val[2]);
+	cic c_03 (reset, clk, en_right, en_pcm, din[1], val[3]);
 
-	doa doa_00 (clk, val[0]);
 
 	initial begin
 	   $dumpfile("cic.vcd");
 	   $dumpvars(0, test);
-		for(i=0; i<16; i=i+1) begin
-			$dumpvars(1, val[i]);
-		end
+		for(i=0; i<16; i=i+1) begin $dumpvars(1, val[i]); end
+		for(i=0; i<8; i=i+1) begin $dumpvars(1, din[i]); end
 	end
 
 endmodule
