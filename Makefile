@@ -37,8 +37,8 @@ din.v: cic.c
 	gcc -Wall -Werror cic.c -o cic -lm && ./cic > din.v
 
 lint: ${SRCS}
-	verilator --lint-only -Wall --timing top.v
-	verilator --lint-only -Wall --timing test.v
+	verilator --lint-only -Wall --timing --top top top.v
+	verilator --lint-only -Wall --timing --top test test.v
 
 prog: #for sram
 	iceprog -S $(NAME).bin

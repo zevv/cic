@@ -1,9 +1,8 @@
 
 //`timescale 1ns / 1ps
 `include "cic.v"
-`include "doa.v"
 
-module test;
+module test(output clk_out_pdm);
 
 	integer i;
 
@@ -27,7 +26,10 @@ module test;
 	wire en_pcm;
 	audio_clock a1 (reset, clk, clk_out_pdm, en_left, en_right, en_pcm);
 
+	/* verilator lint_off UNUSEDSIGNAL */
 	wire [15:0] val [15:0];
+	/* verilator lint_on UNUSEDSIGNAL */
+
 	reg din[15:0];
 	cic c_00 (reset, clk, en_left,  en_pcm, din[0], val[0]);
 	cic c_01 (reset, clk, en_right, en_pcm, din[0], val[1]);
