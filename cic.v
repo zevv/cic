@@ -1,4 +1,6 @@
 
+/* verilator lint_off DECLFILENAME */
+
 module integrator #(parameter W=16)
 	(input reset, input clk, input signed [W-1:0] din, output reg signed [W-1:0] dout = 0);
 
@@ -56,9 +58,9 @@ module cic #(parameter W=16)
 		else
 
 			if (din == 0)
-				d0 <= +24'd1;
+				d0 <= 1;
 			else
-				d0 <= -24'd1;
+				d0 <= -1;
 	end
 
 endmodule
