@@ -88,29 +88,23 @@ void pdm(double *y)
 		
 		printf("#5\n");
 		for(int j=0; j<16; j+=2) {
-			printf("din[%d] = %d;\n", j<2, out[j] > 0 ? 1 : 0);
+			printf("din[%d] = %d;\n", j/2, out[j] > 0 ? 1 : 0);
 		}
 
 		printf("#15\n");
 		for(int j=0; j<16; j+=2) {
-			printf("din[%d] = 1'dx;\n", j<2);
+			printf("din[%d] = 1'dx;\n", j/2);
 		}
 
 		printf("#5\n");
 		for(int j=1; j<16; j+=2) {
-			printf("din[%d] = %d;\n", j<2, out[j] > 0 ? 1 : 0);
+			printf("din[%d] = %d;\n", j/2, out[j] > 0 ? 1 : 0);
 		}
 		
 		printf("#15\n");
 		for(int j=0; j<16; j+=2) {
-			printf("din[%d] = 1'dx;\n", j<2);
+			printf("din[%d] = 1'dx;\n", j/2);
 		}
-
-		//printf(" # 10 din = 1'dx;\n");
-		//printf(" # 10 din = %d;\n", out1 > 0 ? 1 : 0);
-		//printf(" # 10 din = 1'dx;\n");
-		//emit(out0, out1, v0, v1);
-		//printf("%f %f\n", out, v);
 	}
 }
 
@@ -125,6 +119,7 @@ int main(int argc, char **argv)
 		for(int j=0; j<16; j++) {
 			y[j] = cos(t * 2 * M_PI * (((j * 23123123) % 2000) + 100));
 		}
+		y[0] = (y[0] < 0) ? -1 : +1;
 		pdm(y);
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;
