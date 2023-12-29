@@ -73,18 +73,28 @@ void emit(double v, float vorg)
 }
 
 
-void pdm(double v)
+void pdm(double v0, double v1)
 {
-	static double out = 0.0;
-	static double integrator = 0.0;
+	static double out0 = 0.0;
+	static double int0 = 0.0;
+	static double out1 = 0.0;
+	static double int1 = 0.0;
 
 	for(int i=0; i<48; i++) {
-		integrator += v;
-		out = (integrator > 0.0) ? +1.0 : -1.0;
-		printf(" # 2 din = %d;\n", out > 0 ? 1 : 0);
-		emit(out, v);
+		int0 += v0;
+		out0 = (int0 > 0.0) ? +1.0 : -1.0;
+		
+		int1 += v1;
+		out1 = (int1 > 0.0) ? +1.0 : -1.0;
+
+		printf(" # 20 din = %d;\n", out0 > 0 ? 1 : 0);
+		printf(" # 20 din = 1'dx;\n");
+		printf(" # 20 din = %d;\n", out1 > 0 ? 1 : 0);
+		printf(" # 20 din = 1'dx;\n");
+		//emit(out0, out1, v0, v1);
 		//printf("%f %f\n", out, v);
-		integrator -= out;
+		int0 -= out0;
+		int1 -= out1;
 	}
 }
 
@@ -95,10 +105,11 @@ int main(int argc, char **argv)
 
 	double t = 0;
 	for(int i=0; i<80; i++) {
-		double y = cos(t * 2 * M_PI * 121) * 0.5 + sin(t * 2 * M_PI * 200) * 0.3;
+		double y0 = cos(t * 2 * M_PI * 521);
+		double y1 = sin(t * 2 * M_PI * 200);
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;
-		pdm(y);
+		pdm(y0, y1);
 	}
 	return 0;
 }
