@@ -117,9 +117,8 @@ int main(int argc, char **argv)
 	for(int i=0; i<80; i++) {
 		double y[16];
 		for(int j=0; j<16; j++) {
-			y[j] = cos(t * 2 * M_PI * (((j * 23123123) % 2000) + 100));
+			y[j] = cos(t * 2 * M_PI * 1000 + j*-0.8);
 		}
-		y[0] = (y[0] < 0) ? -1 : +1;
 		pdm(y);
 		//y = cos(t * 2 * M_PI * 100) * 0.5;
 		t += 1/8000.0;

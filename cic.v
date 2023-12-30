@@ -59,9 +59,8 @@ module cic #(parameter W=16)
 		if (reset)
 			d0 <= 0;
 		else
-
 			if (din == 0)
-				d0 <= 1;
+				d0 <= +1;
 			else
 				d0 <= -1;
 	end
